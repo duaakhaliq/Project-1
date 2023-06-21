@@ -7,12 +7,11 @@ import { AuthService } from './auth/auth.service';
 import { UserModule } from './user/user.module';
 import { UserService } from './user/user.service';
 import { UserController } from './user/user.controller';
-import { JwtModule, JwtService } from '@nestjs/jwt';
+import { JwtModule } from '@nestjs/jwt';
 import { AuthModule } from './auth/auth.module';
 import { SessionService } from './user/session/session.service';
-import { SessionEntity } from './user/session/session-entity.repository';
+import { SessionEntity } from './user/session/session.entity';
 import { Repository } from 'typeorm';
-
 
 @Module({
   imports: [
@@ -20,9 +19,9 @@ import { Repository } from 'typeorm';
       type: 'postgres',
       host: 'localhost',
       port: 5432,
-      username: 'user',
-      password: 'user',
-      database: 'postgres',
+      username: 'test',
+      password: 'test',
+      database: 'test',
       entities: [__dirname + '/**/*.entity.{js,ts}'],
       synchronize: true,
     }),
@@ -30,10 +29,10 @@ import { Repository } from 'typeorm';
       secret: 'mySecretKey123', // Replace with your own secret key
       signOptions: { expiresIn: '1h' }, // Set token expiration time as per your requirement
     }),
-    
-    UserModule, AuthModule
+    UserModule,
+    AuthModule,
   ],
   controllers: [AppController, AuthController, UserController],
-  providers: [AppService, Repository, AuthService, UserService, JwtService, SessionService, SessionEntity],
+  providers: [AppService, AuthService, UserService, SessionService, SessionEntity, Repository],
 })
 export class AppModule {}

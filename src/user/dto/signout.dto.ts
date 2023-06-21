@@ -3,9 +3,8 @@ import { IsNotEmpty, IsString } from 'class-validator';
 export class SignoutDto {
   @IsNotEmpty()
   @IsString()
-  userId: string;
+  id: number;
 
   @IsNotEmpty()
   refreshToken: string;
 }
-

@@ -1,18 +1,10 @@
-import {
-  Body,
-  Controller,
-  Get,
-  HttpCode,
-  HttpStatus,
-  Post,
-  UseGuards
-} from '@nestjs/common';
+import { Body, Controller, HttpCode, HttpStatus, Post, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { SignupDto } from 'src/user/dto/signup.dto';
 import { SigninDto } from 'src/user/dto/signin.dto';
 import { SignoutDto } from 'src/user/dto/signout.dto';
-import { AuthGuard, Public} from './auth.guard';
-
+import { AuthGuard, Public } from './auth.guard';
+import { UserEntity } from 'src/user/entities/user.entity';
 
 @Controller('auth')
 export class AuthController {
@@ -21,29 +13,25 @@ export class AuthController {
   @Public() // This endpoint is public and accessible to all
   @HttpCode(HttpStatus.CREATED)
   @Post('signup')
-  async signup(@Body() signupData: SignupDto): Promise<void> {
-    await this.authService.signup(signupData);
+  async signup(@Body() signupData: SignupDto): Promise<{ message: string; result: Partial<UserEntity>; }> {
+    const result = await this.authService.signup(signupData);
+    return result;
   }
 
- 
   @Public() // This endpoint is public and accessible to all
   @HttpCode(HttpStatus.OK)
   @Post('signin')
-  async signin(@Body() signinData: SigninDto): Promise<{ token: string }> {
-    const token = await this.authService.signin(signinData);
-    return { token };
+  async signin(@Body() signinData: SigninDto): Promise<{ message: string; token: { accessToken: string; refreshToken: string } }> {
+    const result = await this.authService.signin(signinData);
+    return result;
   }
 
+  @Public()
   @UseGuards(AuthGuard) // Apply the AuthGuard to protect this endpoint
-  @Get('protected-resource')
-  async protectedResource(): Promise<string> {
-    // Only authenticated users can access this resource
-    return 'This is a protected resource!';
-  }
-
-  @UseGuards(AuthGuard) // Apply the AuthGuard to protect this endpoint
+  @HttpCode(HttpStatus.OK)
   @Post('signout')
-  async signout(@Body() signoutData: SignoutDto): Promise<void> {
-    await this.authService.signout(signoutData);
+  async signout(@Body() signoutData: SignoutDto): Promise<{ message: string}> {
+    const result = await this.authService.signout(signoutData);
+    return result;
   }
 }

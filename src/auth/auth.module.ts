@@ -6,7 +6,7 @@ import { AuthService } from './auth.service';
 import { UserEntity } from 'src/user/entities/user.entity';
 import { UserService } from 'src/user/user.service';
 import { SessionService } from 'src/user/session/session.service';
-import { SessionEntity } from 'src/user/session/session-entity.repository';
+import { SessionEntity } from 'src/user/session/session.entity';
 import { Repository } from 'typeorm';
 
 @Module({
