@@ -18,9 +18,4 @@ export class UserEntity {
 
   @OneToMany(() => SessionEntity, (session) => session.user)
   sessions: SessionEntity[];
-
-  @BeforeInsert()
-  async hashPassword() {
-    this.password = await bcrypt.hash(this.password, 10);
-  }
 }

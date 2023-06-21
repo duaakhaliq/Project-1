@@ -25,9 +25,9 @@ export class UserService {
       throw new ConflictException('Password and confirm password must match');
     }
 
-    // const hashedPassword = await bcrypt.hash(password, 10); // Hash the password
+    const hashedPassword = await bcrypt.hash(password, 10); // Hash the password
 
-    const newUser = this.userRepository.create({ name, email, password });
+    const newUser = this.userRepository.create({ name, email, password: hashedPassword });
     return this.userRepository.save(newUser);
   }
 

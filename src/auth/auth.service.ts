@@ -28,17 +28,17 @@ export class AuthService {
     const user = await this.userService.getUserByEmail(email);
 
     if (!user) {
-      throw new UnauthorizedException('Invalid email or password');
+      throw new UnauthorizedException('User does not exist');
     }
 
-    // const passwordMatch = await bcrypt.compare(password, user.password);
+    const passwordMatch = await bcrypt.compare(password, user.password);
 
-    // if (!passwordMatch) {
-    //   throw new UnauthorizedException('Invalid email or password');
-    // }
+    if (!passwordMatch) {
+      throw new UnauthorizedException('Invalid password');
+    }
     const payload = { id: user.id, name: user.name };
-    const accessToken = await this.jwtService.signAsync( payload, { secret: 'hello', expiresIn: '5m', });
-    const refreshToken = await this.jwtService.signAsync(payload, { secret: 'hello-world', expiresIn: '7d', });
+    const accessToken = await this.jwtService.signAsync( payload, { secret: 'myAccessTokenSecret', expiresIn: '1m', });
+    const refreshToken = await this.jwtService.signAsync(payload, { secret: 'myRefreshTokenSecret', expiresIn: '5d', });
     
     await this.sessionService.createSession(user, refreshToken);
 
